@@ -1,0 +1,17 @@
+{
+  "name": "Boom!! — Desafio das Bombas",
+  "short_name": "Boom!!",
+  "description": "Dinâmica de perguntas com bombas — Solo ou Equipes",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#031027",
+  "theme_color": "#071b3a",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
