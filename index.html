@@ -6,6 +6,10 @@
 <meta name="theme-color" content="#071b3a">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Boom!!">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
 <title>Boom!! | Solo & Equipes</title>
 <style>
 :root{
@@ -37,10 +41,12 @@ button{cursor:pointer}
 .top-btn:active{transform:translateY(1px)}
 .top-btn.primary{background:linear-gradient(135deg,#ffe37d,var(--yellow));color:#06152c}
 .top-btn.danger{background:rgba(255,153,153,.1);border-color:rgba(255,153,153,.32);color:#ffd0d0}
+.music-controls{display:flex;align-items:center;gap:8px;padding:4px 10px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.045)}
+.volume-label{font-size:.75rem;color:var(--muted);font-weight:800}
+.volume-slider{width:80px;accent-color:var(--yellow);cursor:pointer}
 
 .content{padding:24px}
 
-/* STATUS BAR */
 .statusbar{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;padding:14px 16px;border:1px solid var(--line);border-radius:17px;background:rgba(255,255,255,.04);margin-bottom:18px}
 .mode-info strong{display:block;font-size:1.05rem}
 .mode-info span{color:var(--muted);font-size:.85rem}
@@ -58,23 +64,19 @@ button{cursor:pointer}
 .progress-fill{height:100%;width:0;background:linear-gradient(90deg,#22a9ef,var(--yellow));transition:width .35s ease}
 .progress-label{font-size:.85rem;color:var(--muted);font-weight:800;white-space:nowrap}
 
-/* CHRONO */
 .chrono-panel{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 12px;border:1px solid rgba(255,255,255,.11);border-radius:14px;background:rgba(2,13,31,.34);margin-bottom:18px}
 .chrono-block{min-width:100px}
 .chrono-block span{display:block;color:var(--muted);font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
 .chrono-block strong{display:block;margin-top:2px;font-size:1.15rem;font-variant-numeric:tabular-nums;letter-spacing:.04em}
 .chrono-start{border:1px solid rgba(247,191,37,.34);border-radius:11px;min-height:38px;padding:0 13px;background:linear-gradient(135deg,#ffe37d,var(--yellow));color:#06152c;font-weight:900}
-.chrono-start:disabled{cursor:default;opacity:.65;filter:grayscale(.15)}
+.chrono-start:disabled{cursor:default;opacity:.65}
 .chrono-status{min-width:120px;color:var(--muted);font-size:.78rem;font-weight:800}
 .chrono-panel.running{border-color:rgba(121,239,164,.33)}
 .chrono-panel.running .chrono-status{color:var(--success)}
-.chrono-panel.warning{border-color:rgba(247,191,37,.55);box-shadow:0 0 0 2px rgba(247,191,37,.08)}
+.chrono-panel.warning{border-color:rgba(247,191,37,.55)}
 .chrono-panel.expired{border-color:rgba(255,153,153,.54);background:rgba(255,82,82,.07)}
 .chrono-panel.expired .chrono-status,.chrono-panel.expired #chronoRemaining{color:var(--error)}
-.chrono-panel.completed{border-color:rgba(121,239,164,.45);background:rgba(121,239,164,.06)}
-.chrono-panel.completed .chrono-status{color:var(--success)}
 
-/* STATIONS */
 .stations{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
 .station{position:relative;border:1px solid var(--line);border-radius:20px;background:rgba(7,27,58,.72);padding:16px;display:flex;flex-direction:column;align-items:center;transition:border-color .25s ease,box-shadow .25s ease,opacity .25s ease}
 .station.current-turn{border-color:var(--yellow);box-shadow:0 0 0 2px rgba(247,191,37,.15),0 12px 30px rgba(0,0,0,.28)}
@@ -90,13 +92,12 @@ button{cursor:pointer}
 .station.failed .state-chip{background:rgba(255,92,92,.18);color:#ffb7b7}
 .station.current-turn .state-chip{background:rgba(247,191,37,.2);color:#ffe7a3}
 
-/* BOMB */
 .bomb-rig{position:relative;width:200px;height:180px;display:block;margin:6px 0 0;filter:drop-shadow(0 12px 18px rgba(0,0,0,.24))}
 .lighter{position:absolute;left:6px;top:82px;width:52px;height:78px;border-radius:14px 14px 10px 10px;background:linear-gradient(90deg,#7e0e1f 0%,#d82643 18%,#f05b6c 42%,#c51632 68%,#780b1a 100%);box-shadow:inset 6px 0 10px rgba(255,255,255,.16),inset -8px 0 12px rgba(0,0,0,.26),0 10px 18px rgba(0,0,0,.38);border:1px solid rgba(255,255,255,.14);transition:transform .2s ease}
 .lighter:before{content:"";position:absolute;left:9px;right:9px;top:28px;height:26px;border-radius:8px;background:linear-gradient(90deg,rgba(255,255,255,.12),rgba(255,255,255,.02),rgba(0,0,0,.16));border:1px solid rgba(255,255,255,.10)}
 .lighter-top{position:absolute;left:6px;top:-10px;width:40px;height:24px;border-radius:8px 8px 6px 6px;background:linear-gradient(90deg,#5f6875 0%,#d7dde6 22%,#f7f9fb 45%,#a5afbd 68%,#4b5563 100%);box-shadow:inset 0 2px rgba(255,255,255,.65),0 4px 8px rgba(0,0,0,.28)}
 .lighter-wheel{position:absolute;left:14px;top:-5px;width:18px;height:18px;border-radius:50%;background:repeating-linear-gradient(90deg,#3d4652 0 2px,#c7ced8 2px 4px);box-shadow:0 0 0 2px rgba(22,26,32,.38),inset 0 0 0 3px rgba(255,255,255,.13);z-index:2}
-.lighter-flame{position:absolute;left:20px;top:-36px;width:18px;height:32px;opacity:0;transform:scale(.35) translateY(12px);border-radius:60% 60% 60% 60%/72% 72% 38% 38%;background:radial-gradient(circle at 50% 74%,#fff6bf 0 22%,#ffd15a 23% 42%,#ff8a00 43% 67%,rgba(255,85,0,.95) 68% 82%,rgba(255,85,0,0) 83%);filter:drop-shadow(0 0 8px rgba(255,166,0,.9)) drop-shadow(0 0 16px rgba(255,101,0,.55));transition:opacity .18s ease,transform .18s ease;transform-origin:50% 100%;animation:none}
+.lighter-flame{position:absolute;left:20px;top:-36px;width:18px;height:32px;opacity:0;transform:scale(.35) translateY(12px);border-radius:60% 60% 60% 60%/72% 72% 38% 38%;background:radial-gradient(circle at 50% 74%,#fff6bf 0 22%,#ffd15a 23% 42%,#ff8a00 43% 67%,rgba(255,85,0,.95) 68% 82%,rgba(255,85,0,0) 83%);filter:drop-shadow(0 0 8px rgba(255,166,0,.9)) drop-shadow(0 0 16px rgba(255,101,0,.55));transition:opacity .18s ease,transform .18s ease;transform-origin:50% 100%}
 .station.activating .lighter{transform:translateY(4px) rotate(-1deg)}
 .station.activating .lighter-flame,.station.success .lighter-flame,.station.failed .lighter-flame{opacity:1;transform:scale(1) translateY(0);animation:flameDance .18s ease-in-out infinite alternate}
 .fuse-track{position:absolute;left:46px;top:68px;width:72px;height:14px;transform:rotate(-16deg);transform-origin:left center;z-index:3}
@@ -111,9 +112,9 @@ button{cursor:pointer}
     radial-gradient(circle at 38% 32%,rgba(255,255,255,.12) 0 16%,transparent 36%),
     radial-gradient(circle at 34% 28%,#151515 0 33%,#2f2f2f 64%,#050507 100%);
   box-shadow:inset 10px 8px 14px rgba(255,255,255,.10),inset -14px -18px 22px rgba(0,0,0,.42),0 14px 22px rgba(0,0,0,.46);border:2px solid rgba(255,255,255,.18);display:grid;place-items:center;transition:transform .32s ease,opacity .28s ease,filter .3s ease;z-index:2}
-.bomb-shell:before{content:"";position:absolute;left:20px;top:18px;width:24px;height:52px;border-radius:50%;background:linear-gradient(rgba(255,255,255,.38),rgba(255,255,255,0));transform:rotate(-14deg);mix-blend-mode:screen}
-.bomb-shell:after{content:"";position:absolute;left:42px;top:-14px;width:26px;height:20px;border-radius:8px 8px 6px 6px;background:linear-gradient(90deg,#4a515c,#d8dee7 38%,#f8fafc 52%,#8892a0 78%,#252a33);box-shadow:inset 0 2px rgba(255,255,255,.55),0 5px 9px rgba(0,0,0,.28)}
-.bomb-label{position:relative;z-index:2;font-size:1.3rem;font-weight:900;color:rgba(255,255,255,.94);text-shadow:0 2px 10px rgba(0,0,0,.52)}
+.bomb-shell:before{content:"";position:absolute;left:20px;top:18px;width:24px;height:52px;border-radius:50%;background:linear-gradient(rgba(255,255,255,.38),rgba(255,255,255,0));transform:rotate(-14deg)}
+.bomb-shell:after{content:"";position:absolute;left:42px;top:-14px;width:26px;height:20px;border-radius:8px 8px 6px 6px;background:linear-gradient(90deg,#4a515c,#d8dee7 38%,#f8fafc 52%,#8892a0 78%,#252a33);box-shadow:inset 0 2px rgba(255,255,255,.55)}
+.bomb-label{position:relative;z-index:2;font-size:1.3rem;font-weight:900;color:rgba(255,255,255,.94)}
 .shockwave{position:absolute;left:88px;top:56px;width:80px;height:80px;border-radius:50%;border:5px solid rgba(255,232,138,.9);opacity:0;transform:scale(.2);pointer-events:none;z-index:1}
 .station.success .shockwave,.station.failed .shockwave{animation:shockwave .88s ease forwards}
 .station.failed .shockwave{border-color:rgba(255,140,140,.88)}
@@ -138,13 +139,12 @@ button{cursor:pointer}
 .confetti span:nth-child(3),.confetti span:nth-child(6),.confetti span:nth-child(9){animation-delay:.08s}
 .confetti span:nth-child(4),.confetti span:nth-child(7),.confetti span:nth-child(10){animation-delay:.12s}
 .error-burst{position:absolute;inset:20px 10px 10px 50px;display:grid;place-items:center;pointer-events:none;z-index:5}
-.error-burst strong{padding:11px 16px;border-radius:14px;background:rgba(133,13,28,.92);border:2px solid rgba(255,184,184,.38);font-size:1.15rem;font-weight:900;letter-spacing:.08em;color:#fff0f0;opacity:0;transform:scale(.5) rotate(-6deg);box-shadow:0 12px 28px rgba(0,0,0,.28)}
+.error-burst strong{padding:11px 16px;border-radius:14px;background:rgba(133,13,28,.92);border:2px solid rgba(255,184,184,.38);font-size:1.15rem;font-weight:900;color:#fff0f0;opacity:0;transform:scale(.5) rotate(-6deg)}
 .station.failed .error-burst strong{animation:errorPop .9s ease forwards}
 .correct-burst{position:absolute;inset:20px 10px 10px 50px;display:grid;place-items:center;pointer-events:none;z-index:5}
-.correct-burst strong{padding:11px 16px;border-radius:14px;background:rgba(16,120,58,.92);border:2px solid rgba(186,255,207,.46);font-size:1.15rem;font-weight:900;letter-spacing:.08em;color:#eafff0;opacity:0;transform:scale(.5) rotate(6deg);box-shadow:0 12px 28px rgba(0,0,0,.28),0 0 22px rgba(121,239,164,.22)}
+.correct-burst strong{padding:11px 16px;border-radius:14px;background:rgba(16,120,58,.92);border:2px solid rgba(186,255,207,.46);font-size:1.15rem;font-weight:900;color:#eafff0;opacity:0;transform:scale(.5) rotate(6deg)}
 .station.success .correct-burst strong{animation:correctPop .9s ease forwards .72s}
 
-/* QUESTION AREA */
 .question{width:100%;margin-top:14px;padding:12px;border-left:4px solid var(--yellow);border-radius:0 12px 12px 0;background:rgba(247,191,37,.07);line-height:1.5;color:#eef3fb;min-height:72px;font-size:.95rem}
 .answer-input{width:100%;margin-top:10px;border:1px solid var(--line);border-radius:12px;background:rgba(2,13,31,.65);color:#fff;padding:12px 13px;outline:none}
 .answer-input:focus{border-color:rgba(247,191,37,.62);box-shadow:0 0 0 3px rgba(247,191,37,.13)}
@@ -159,8 +159,7 @@ button{cursor:pointer}
 .option-btn.correct-selected{background:rgba(121,239,164,.16);border-color:rgba(121,239,164,.68);color:#baffcf}
 .option-btn.wrong-selected{background:rgba(255,92,92,.18);border-color:rgba(255,92,92,.82);color:#ffb7b7;animation:wrongChoice .45s ease}
 .station.time-locked{opacity:.6}
-.station.time-locked .answer-input,.station.time-locked .option-btn{cursor:not-allowed}
-.team-tag{position:absolute;top:12px;left:12px;padding:4px 9px;border-radius:999px;font-size:.7rem;font-weight:900;letter-spacing:.05em;text-transform:uppercase}
+.team-tag{position:absolute;top:12px;left:12px;padding:4px 9px;border-radius:999px;font-size:.7rem;font-weight:900;text-transform:uppercase}
 .team-tag.teamA{background:rgba(79,168,255,.2);color:#b9ddff;border:1px solid rgba(79,168,255,.4)}
 .team-tag.teamB{background:rgba(255,139,61,.2);color:#ffd6b3;border:1px solid rgba(255,139,61,.4)}
 .team-tag.solo{background:rgba(247,191,37,.2);color:#ffe7a3;border:1px solid rgba(247,191,37,.4)}
@@ -171,7 +170,6 @@ button{cursor:pointer}
 .footer{text-align:center;padding:14px 22px 18px;border-top:1px solid var(--line);color:#9eafc5;font-size:.82rem}
 .footer strong{color:var(--yellow-soft)}
 
-/* MODALS */
 .overlay{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(1,8,18,.82)}
 .overlay.show{display:flex}
 .modal{width:min(900px,100%);max-height:92vh;overflow:auto;border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,#0b2c58,#061a38);box-shadow:0 28px 65px rgba(0,0,0,.42);padding:22px}
@@ -186,14 +184,14 @@ button{cursor:pointer}
 .field label{font-weight:800;font-size:.88rem}
 .field small,.hint{color:#9fb0c6;line-height:1.4;font-size:.82rem}
 .text-input,.text-area,.select-input{width:100%;border:1px solid var(--line);border-radius:12px;background:rgba(2,13,31,.62);color:#fff;padding:11px 12px;outline:none}
-.text-area{min-height:84px;resize:vertical}
+.text-area{min-height:84px;resize:vertical;font-family:ui-monospace,"Consolas",monospace;font-size:.85rem}
 .text-input:focus,.text-area:focus,.select-input:focus{border-color:rgba(247,191,37,.6);box-shadow:0 0 0 3px rgba(247,191,37,.12)}
 .modal-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
 .btn{border:1px solid var(--line);border-radius:11px;min-height:42px;padding:0 14px;background:rgba(255,255,255,.07);color:#fff;font-weight:800}
 .btn.primary{background:linear-gradient(135deg,#ffe37d,var(--yellow));color:#06152c}
 .btn.danger{background:rgba(255,82,82,.12);color:#ffb2b2;border-color:rgba(255,82,82,.25)}
+.btn.success{background:rgba(121,239,164,.14);color:#baffcf;border-color:rgba(121,239,164,.35)}
 
-/* MODE PICKER */
 .mode-picker{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:8px}
 .mode-card{cursor:pointer;padding:20px;border:2px solid var(--line);border-radius:16px;background:rgba(255,255,255,.04);transition:all .2s ease;text-align:center}
 .mode-card:hover{border-color:rgba(247,191,37,.5)}
@@ -202,7 +200,6 @@ button{cursor:pointer}
 .mode-card strong{display:block;font-size:1.05rem;margin-bottom:5px}
 .mode-card span{color:var(--muted);font-size:.85rem;line-height:1.4}
 
-/* DISTRIBUTION PICKER */
 .dist-picker{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .dist-card{cursor:pointer;padding:14px;border:2px solid var(--line);border-radius:14px;background:rgba(255,255,255,.04);transition:all .2s ease}
 .dist-card:hover{border-color:rgba(247,191,37,.5)}
@@ -210,18 +207,26 @@ button{cursor:pointer}
 .dist-card strong{display:block;font-size:.92rem;margin-bottom:4px}
 .dist-card span{color:var(--muted);font-size:.8rem;line-height:1.35}
 
-/* OUTCOME */
 .outcome-overlay{position:fixed;inset:0;z-index:250;display:none;align-items:center;justify-content:center;padding:24px;background:radial-gradient(circle at 50% 20%,rgba(247,191,37,.22),rgba(1,8,18,.9) 42%,rgba(1,8,18,.96));overflow:hidden}
 .outcome-overlay.show{display:flex}
 .outcome-card{position:relative;width:min(760px,100%);min-height:320px;border:1px solid rgba(255,255,255,.18);border-radius:30px;background:linear-gradient(180deg,rgba(11,44,88,.96),rgba(6,26,56,.96));box-shadow:0 32px 80px rgba(0,0,0,.52);padding:38px 26px;text-align:center;display:grid;place-items:center;gap:12px;overflow:hidden}
-.outcome-icon{font-size:3.6rem;animation:outcomeIconPop .7s cubic-bezier(.18,.95,.22,1.2) both}
-.outcome-card h2{margin:0;font-size:clamp(1.6rem,4.5vw,2.8rem);line-height:1.05;color:#fff}
+.outcome-icon{font-size:3.6rem}
+.outcome-card h2{margin:0;font-size:clamp(1.6rem,4.5vw,2.8rem);color:#fff}
 .outcome-card p{margin:0;max-width:620px;color:#dbe8ff;line-height:1.5;font-size:1rem;font-weight:800}
 .outcome-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:8px}
 .outcome-overlay.victory .outcome-card{border-color:rgba(121,239,164,.42)}
 .outcome-overlay.failure .outcome-card{border-color:rgba(255,153,153,.38)}
 .outcome-confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .outcome-confetti span{position:absolute;top:-24px;width:9px;height:16px;border-radius:3px;animation:outcomeConfettiFall var(--dur,3s) linear forwards}
+
+.json-section{margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+.json-section h3{margin:0 0 10px;font-size:1.05rem}
+.json-help{background:rgba(2,13,31,.5);border:1px solid var(--line);border-radius:12px;padding:12px;color:#cdd9ea;font-size:.82rem;line-height:1.55;margin-bottom:12px}
+.json-help code{background:rgba(247,191,37,.12);color:var(--yellow-soft);padding:1px 6px;border-radius:4px;font-family:ui-monospace,monospace;font-size:.82rem}
+.json-help pre{background:rgba(0,0,0,.32);padding:10px;border-radius:8px;overflow-x:auto;color:#e8f0ff;font-size:.78rem;margin:8px 0 0;line-height:1.5}
+.json-status{margin-top:8px;font-size:.85rem;font-weight:800;min-height:20px}
+.json-status.ok{color:var(--success)}
+.json-status.err{color:var(--error)}
 
 @keyframes flameDance{0%{transform:scale(.96) translateY(0) rotate(-2deg)}100%{transform:scale(1.07) translateY(-1px) rotate(2deg)}}
 @keyframes wrongChoice{0%,100%{transform:translateX(0)}22%{transform:translateX(-5px)}44%{transform:translateX(5px)}66%{transform:translateX(-3px)}84%{transform:translateX(3px)}}
@@ -230,7 +235,6 @@ button{cursor:pointer}
 @keyframes errorPop{0%{opacity:0;transform:scale(.45) rotate(-10deg)}45%{opacity:1;transform:scale(1.08) rotate(2deg)}100%{opacity:1;transform:scale(1) rotate(0deg)}}
 @keyframes correctPop{0%{opacity:0;transform:scale(.45) rotate(8deg)}45%{opacity:1;transform:scale(1.08) rotate(-2deg)}100%{opacity:1;transform:scale(1) rotate(0deg)}}
 @keyframes smokeRise{0%{opacity:0;transform:translateY(16px) scale(.56)}25%{opacity:.55}100%{opacity:0;transform:translateY(-56px) scale(1.4)}}
-@keyframes outcomeIconPop{0%{opacity:0;transform:scale(.35) rotate(-12deg)}70%{opacity:1;transform:scale(1.12) rotate(4deg)}100%{opacity:1;transform:scale(1) rotate(0deg)}}
 @keyframes outcomeConfettiFall{0%{transform:translateY(-30px) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(760deg);opacity:.05}}
 
 @media(max-width:820px){
@@ -245,6 +249,7 @@ button{cursor:pointer}
   .progress-track{width:100%}
   .top-actions{width:100%}
   .top-btn{flex:1}
+  .music-controls{width:100%;flex-wrap:wrap}
 }
 </style>
 </head>
@@ -270,6 +275,11 @@ button{cursor:pointer}
     <div class="top-actions">
       <button id="restartBtn" class="top-btn danger">↻ Reiniciar</button>
       <button id="setupBtn" class="top-btn">🎮 Modo de jogo</button>
+      <div class="music-controls">
+        <button id="soundBtn" class="top-btn" aria-pressed="true" title="Ligar/desligar sons">🔊 Som</button>
+        <label class="volume-label" for="volumeSlider">Vol</label>
+        <input id="volumeSlider" class="volume-slider" type="range" min="0" max="100" value="70" aria-label="Volume">
+      </div>
       <button id="settingsBtn" class="top-btn primary">⚙ Configurações</button>
     </div>
   </header>
@@ -299,7 +309,7 @@ button{cursor:pointer}
     <div id="completion" class="completion"></div>
   </section>
 
-  <footer class="footer"><strong>Boom!!</strong> · Desafio das bombas · pronto para GitHub Pages</footer>
+  <footer class="footer"><strong>Boom!!</strong> · Desafio das bombas · PWA pronto para GitHub Pages</footer>
 </main>
 
 <!-- ============ SETUP MODAL ============ -->
@@ -328,14 +338,8 @@ button{cursor:pointer}
 
     <div id="teamFields" style="display:none; margin-top:16px;">
       <div class="fields">
-        <div class="field">
-          <label for="cfgTeamA">Nome da Equipe A</label>
-          <input id="cfgTeamA" class="text-input" type="text" value="Equipe A">
-        </div>
-        <div class="field">
-          <label for="cfgTeamB">Nome da Equipe B</label>
-          <input id="cfgTeamB" class="text-input" type="text" value="Equipe B">
-        </div>
+        <div class="field"><label for="cfgTeamA">Nome da Equipe A</label><input id="cfgTeamA" class="text-input" type="text" value="Equipe A"></div>
+        <div class="field"><label for="cfgTeamB">Nome da Equipe B</label><input id="cfgTeamB" class="text-input" type="text" value="Equipe B"></div>
       </div>
       <div class="field full" style="margin-top:14px;">
         <label>Como distribuir as perguntas?</label>
@@ -370,7 +374,7 @@ button{cursor:pointer}
     <div class="modal-head">
       <div>
         <h2>⚙ Configurações</h2>
-        <p>Edite perguntas, tempo e aparência da dinâmica.</p>
+        <p>Edite perguntas, tempo e importe/exporte em JSON.</p>
       </div>
       <button class="close-btn" data-close="settingsOverlay" type="button">×</button>
     </div>
@@ -387,7 +391,33 @@ button{cursor:pointer}
       <button id="addQuestionBtn" class="btn" type="button">➕ Adicionar pergunta</button>
     </div>
 
-    <section class="editor-section">
+    <section class="json-section">
+      <h3>📥 Importar / Exportar perguntas em JSON</h3>
+      <div class="json-help">
+        Você pode importar um <strong>array de perguntas</strong> ou um objeto com a chave <code>questions</code>.
+        Formatos aceitos:
+        <pre>[
+  { "type": "choice", "q": "Quanto é 7×8?", "options": ["48","54","56","64"], "correct": "56" },
+  { "type": "open",   "q": "Capital do Brasil?", "correct": "Brasília", "alternatives": "brasilia" }
+]</pre>
+      </div>
+
+      <div class="modal-actions" style="margin-top:0;">
+        <button id="exportJsonBtn" class="btn success" type="button">📤 Exportar perguntas</button>
+        <button id="importFileBtn" class="btn" type="button">📂 Importar de arquivo</button>
+        <button id="copyTemplateBtn" class="btn" type="button">📋 Copiar modelo</button>
+        <button id="applyPasteBtn" class="btn primary" type="button">✅ Aplicar JSON colado</button>
+      </div>
+      <input id="importFileInput" type="file" accept="application/json,.json" hidden>
+
+      <div class="field full" style="margin-top:12px;">
+        <label for="pasteJsonArea">Ou cole o JSON aqui</label>
+        <textarea id="pasteJsonArea" class="text-area" style="min-height:140px;" placeholder='Cole aqui o array de perguntas, ex.:&#10;[ { "type": "choice", "q": "...", "options": ["..."], "correct": "..." } ]'></textarea>
+      </div>
+      <div id="jsonStatus" class="json-status"></div>
+    </section>
+
+    <section class="json-section">
       <h3>Perguntas cadastradas</h3>
       <div id="questionEditors" class="question-editors"></div>
     </section>
@@ -409,9 +439,10 @@ button{cursor:pointer}
   </div>
 </div>
 
+<script src="sounds.js"></script>
 <script>
 /* ============================================================
-   BOOM!! — SOLO & EQUIPES
+   BOOM!! — SOLO & EQUIPES + IMPORT/EXPORT JSON + SONS + PWA
    ============================================================ */
 
 const STORAGE_KEY = 'boom2_state_v1';
@@ -429,592 +460,565 @@ const DEFAULT_QUESTIONS = [
 ];
 
 const DEFAULT_STATE = {
-  mode: 'solo',
-  teamA: 'Equipe A',
-  teamB: 'Equipe B',
-  distribution: 'alternate',
-  blockSplit: 7,
-  title: 'Boom!! — Desafio',
-  subtitle: 'Acenda, responda e exploda!',
-  timerMinutes: 5,
-  timerSeconds: 0,
+  mode:'solo', teamA:'Equipe A', teamB:'Equipe B',
+  distribution:'alternate', blockSplit:7,
+  title:'Boom!! — Desafio', subtitle:'Acenda, responda e exploda!',
+  timerMinutes:5, timerSeconds:0,
   questions: JSON.parse(JSON.stringify(DEFAULT_QUESTIONS)),
-  answers: {},      // qIndex -> { correct, team }
-  sequence: [],     // [{q, team}]
-  turnPos: 0        // posição atual na sequência
+  answers:{}, sequence:[], turnPos:0
 };
 
 let state = loadState();
 
-/* ---------- Persistência ---------- */
 function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      return Object.assign({}, DEFAULT_STATE, parsed);
-    }
-  } catch (e) {}
+    if (raw) return Object.assign({}, DEFAULT_STATE, JSON.parse(raw));
+  } catch(e){}
   return JSON.parse(JSON.stringify(DEFAULT_STATE));
 }
 function saveState() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){}
 }
 
-/* ---------- Helpers ---------- */
-const $ = sel => document.querySelector(sel);
-const $$ = sel => document.querySelectorAll(sel);
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
 
 function normalize(str) {
-  return String(str || '')
-    .toLowerCase()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim();
+  return String(str||'').toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/\s+/g,' ').trim();
 }
 
-/* ---------- Sequência de perguntas ---------- */
+/* ---------- Sequência ---------- */
 function buildSequence() {
   const n = state.questions.length;
   const seq = [];
   if (state.mode === 'solo') {
-    for (let i = 0; i < n; i++) seq.push({ q: i, team: null });
+    for (let i=0;i<n;i++) seq.push({q:i, team:null});
   } else if (state.distribution === 'alternate') {
-    for (let i = 0; i < n; i++) seq.push({ q: i, team: i % 2 === 0 ? 'A' : 'B' });
+    for (let i=0;i<n;i++) seq.push({q:i, team: i%2===0?'A':'B'});
   } else {
-    const split = Math.min(Math.max(1, Number(state.blockSplit) || 1), Math.max(1, n - 1));
-    for (let i = 0; i < n; i++) seq.push({ q: i, team: i < split ? 'A' : 'B' });
+    const split = Math.min(Math.max(1, Number(state.blockSplit)||1), Math.max(1, n-1));
+    for (let i=0;i<n;i++) seq.push({q:i, team: i<split?'A':'B'});
   }
   return seq;
 }
 
-/* ---------- Contadores ---------- */
-function scoreTeam(team) {
-  let correct = 0, total = 0;
-  state.sequence.forEach(item => {
-    if (item.team === team) {
-      total++;
-      const a = state.answers[item.q];
-      if (a && a.correct) correct++;
-    }
+function scoreTeam(team){
+  let c=0,t=0;
+  state.sequence.forEach(it=>{
+    if(it.team===team){t++;const a=state.answers[it.q]; if(a&&a.correct)c++;}
   });
-  return { correct, total };
+  return {correct:c,total:t};
 }
-function scoreSolo() {
-  let correct = 0;
-  const total = state.sequence.length;
-  state.sequence.forEach(item => {
-    const a = state.answers[item.q];
-    if (a && a.correct) correct++;
-  });
-  return { correct, total };
+function scoreSolo(){
+  let c=0; const t=state.sequence.length;
+  state.sequence.forEach(it=>{const a=state.answers[it.q]; if(a&&a.correct)c++;});
+  return {correct:c,total:t};
 }
-function isAnswered(q) { return !!state.answers[q]; }
-function allAnswered() { return state.sequence.length > 0 && state.sequence.every(item => isAnswered(item.q)); }
+function isAnswered(q){return !!state.answers[q];}
+function allAnswered(){return state.sequence.length>0 && state.sequence.every(it=>isAnswered(it.q));}
 
 /* ---------- Cronômetro ---------- */
-const timer = {
-  totalSec: 0,
-  remaining: 0,
-  elapsed: 0,
-  running: false,
-  handle: null,
-  finished: false
-};
-
-function formatTime(sec) {
-  sec = Math.max(0, Math.floor(sec));
-  const m = String(Math.floor(sec / 60)).padStart(2, '0');
-  const s = String(sec % 60).padStart(2, '0');
-  return `${m}:${s}`;
-}
-
-function resetTimer() {
+const timer={totalSec:0,remaining:0,elapsed:0,running:false,handle:null,finished:false};
+function formatTime(sec){sec=Math.max(0,Math.floor(sec));return String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0');}
+function resetTimer(){
   stopTimer();
-  timer.totalSec = (Number(state.timerMinutes) || 0) * 60 + (Number(state.timerSeconds) || 0);
-  timer.remaining = timer.totalSec;
-  timer.elapsed = 0;
-  timer.finished = false;
+  timer.totalSec=(Number(state.timerMinutes)||0)*60+(Number(state.timerSeconds)||0);
+  timer.remaining=timer.totalSec; timer.elapsed=0; timer.finished=false;
   renderTimer();
 }
-
-function renderTimer() {
-  const panel = $('#chronoPanel');
-  panel.classList.remove('running', 'warning', 'expired', 'completed');
-  if (timer.totalSec === 0) {
-    $('#chronoRemaining').textContent = '--:--';
-    $('#chronoElapsed').textContent = '00:00';
-    $('#chronoStatus').textContent = 'Sem tempo limite';
-    $('#chronoStartBtn').disabled = true;
+function renderTimer(){
+  const panel=$('#chronoPanel');
+  panel.classList.remove('running','warning','expired','completed');
+  if(timer.totalSec===0){
+    $('#chronoRemaining').textContent='--:--';
+    $('#chronoElapsed').textContent='00:00';
+    $('#chronoStatus').textContent='Sem tempo limite';
+    $('#chronoStartBtn').disabled=true;
     return;
   }
-  $('#chronoStartBtn').disabled = timer.running;
-  $('#chronoRemaining').textContent = formatTime(timer.remaining);
-  $('#chronoElapsed').textContent = formatTime(timer.elapsed);
-
-  if (timer.finished) {
+  $('#chronoStartBtn').disabled=timer.running;
+  $('#chronoRemaining').textContent=formatTime(timer.remaining);
+  $('#chronoElapsed').textContent=formatTime(timer.elapsed);
+  if(timer.finished){
     panel.classList.add('completed');
-    $('#chronoStatus').textContent = 'Concluído!';
-  } else if (timer.running) {
+    $('#chronoStatus').textContent='Concluído!';
+  } else if(timer.running){
     panel.classList.add('running');
-    if (timer.remaining <= 30) panel.classList.add('warning');
-    $('#chronoStatus').textContent = 'Em andamento';
-  } else if (timer.elapsed > 0) {
-    $('#chronoStatus').textContent = 'Pausado';
+    if(timer.remaining<=30) panel.classList.add('warning');
+    $('#chronoStatus').textContent='Em andamento';
+  } else if(timer.elapsed>0){
+    $('#chronoStatus').textContent='Pausado';
   } else {
-    $('#chronoStatus').textContent = 'Aguardando início';
+    $('#chronoStatus').textContent='Aguardando início';
   }
-  if (timer.remaining <= 0 && timer.elapsed > 0 && !timer.finished) {
+  if(timer.remaining<=0 && timer.elapsed>0 && !timer.finished){
     panel.classList.add('expired');
     panel.classList.remove('running');
-    $('#chronoStatus').textContent = 'Tempo esgotado!';
+    $('#chronoStatus').textContent='Tempo esgotado!';
   }
 }
-
-function startTimer() {
-  if (timer.running || timer.totalSec === 0) return;
-  if (timer.elapsed >= timer.totalSec) return;
-  timer.running = true;
-  $('#chronoStartBtn').disabled = true;
-  timer.handle = setInterval(() => {
+function startTimer(){
+  if(timer.running||timer.totalSec===0) return;
+  if(timer.elapsed>=timer.totalSec) return;
+  timer.running=true; $('#chronoStartBtn').disabled=true;
+  timer.handle=setInterval(()=>{
     timer.elapsed++;
-    timer.remaining = Math.max(0, timer.totalSec - timer.elapsed);
-    if (timer.remaining <= 0) {
-      timer.running = false;
-      timer.finished = true;
+    timer.remaining=Math.max(0,timer.totalSec-timer.elapsed);
+    if(timer.remaining<=0){
+      timer.running=false; timer.finished=true;
       clearInterval(timer.handle);
-      $('#chronoStartBtn').disabled = true;
+      $('#chronoStartBtn').disabled=true;
       renderTimer();
-      showOutcome('failure', '⏰', 'Tempo esgotado!', 'O cronômetro zerou. Reinicie para tentar novamente.');
+      showOutcome('failure','⏰','Tempo esgotado!','O cronômetro zerou. Reinicie para tentar novamente.');
       return;
     }
     renderTimer();
-  }, 1000);
+  },1000);
   renderTimer();
 }
-function stopTimer() {
-  if (timer.handle) clearInterval(timer.handle);
-  timer.handle = null;
-  timer.running = false;
-}
+function stopTimer(){ if(timer.handle) clearInterval(timer.handle); timer.handle=null; timer.running=false; }
 
-/* ---------- Render principal ---------- */
-function render() {
-  renderHeader();
-  renderStatusBar();
-  renderStations();
-  renderCompletion();
-  renderTimer();
-  saveState();
-}
+/* ---------- Render ---------- */
+function render(){ renderHeader(); renderStatusBar(); renderStations(); renderCompletion(); renderTimer(); saveState(); }
 
-function renderHeader() {
-  $('#modeTitle').textContent = state.mode === 'solo'
-    ? '🎯 Modo Solo'
-    : `👥 ${state.teamA} vs ${state.teamB}`;
-  const total = state.questions.length;
-  let detail = '';
-  if (state.mode === 'solo') {
-    detail = `Você responde as ${total} perguntas em sequência.`;
-  } else if (state.distribution === 'alternate') {
-    detail = `Perguntas alternadas entre as equipes (${total} no total).`;
-  } else {
-    const split = Math.min(Math.max(1, Number(state.blockSplit) || 1), Math.max(1, total - 1));
-    detail = `${state.teamA} responde as ${split} primeiras · ${state.teamB} responde as ${total - split} restantes.`;
+function renderHeader(){
+  $('#modeTitle').textContent = state.mode==='solo' ? '🎯 Modo Solo' : `👥 ${state.teamA} vs ${state.teamB}`;
+  const total=state.questions.length;
+  let detail='';
+  if(state.mode==='solo') detail=`Você responde as ${total} perguntas em sequência.`;
+  else if(state.distribution==='alternate') detail=`Perguntas alternadas entre as equipes (${total} no total).`;
+  else {
+    const split=Math.min(Math.max(1,Number(state.blockSplit)||1),Math.max(1,total-1));
+    detail=`${state.teamA} responde as ${split} primeiras · ${state.teamB} responde as ${total-split} restantes.`;
   }
-  $('#modeDetail').textContent = detail;
+  $('#modeDetail').textContent=detail;
 }
 
-function renderStatusBar() {
-  const turnEl = $('#turnIndicator');
-  turnEl.className = 'turn-indicator';
+function renderStatusBar(){
+  const turnEl=$('#turnIndicator'); turnEl.className='turn-indicator';
+  const current=state.sequence[state.turnPos];
+  const done=state.sequence.filter(i=>isAnswered(i.q)).length;
+  const total=state.sequence.length;
+  $('#progressLabel').textContent=`${done} / ${total}`;
+  $('#progressFill').style.width = total ? (done/total*100)+'%' : '0%';
 
-  const current = state.sequence[state.turnPos];
-  const done = state.sequence.filter(i => isAnswered(i.q)).length;
-  const total = state.sequence.length;
-  $('#progressLabel').textContent = `${done} / ${total}`;
-  $('#progressFill').style.width = total ? (done / total * 100) + '%' : '0%';
-
-  // Pontuação
-  const scores = $('#scoresPanel');
-  scores.innerHTML = '';
-
-  if (state.mode === 'solo') {
-    const s = scoreSolo();
-    const chip = document.createElement('div');
-    chip.className = 'score-chip solo';
-    chip.textContent = `✔ ${s.correct} / ${s.total}`;
+  const scores=$('#scoresPanel'); scores.innerHTML='';
+  if(state.mode==='solo'){
+    const s=scoreSolo();
+    const chip=document.createElement('div');
+    chip.className='score-chip solo'; chip.textContent=`✔ ${s.correct} / ${s.total}`;
     scores.appendChild(chip);
-    if (current && !isAnswered(current.q)) {
-      turnEl.classList.add('solo');
-      turnEl.textContent = '🎯 Sua vez!';
-    } else {
-      turnEl.classList.add('solo');
-      turnEl.textContent = '🎯 Concluído';
-    }
+    turnEl.classList.add('solo');
+    turnEl.textContent = (current && !isAnswered(current.q)) ? '🎯 Sua vez!' : '🎯 Concluído';
     return;
   }
-
-  const a = scoreTeam('A');
-  const b = scoreTeam('B');
-  const chipA = document.createElement('div');
-  chipA.className = 'score-chip teamA';
-  chipA.textContent = `${state.teamA}: ${a.correct} / ${a.total}`;
-  const chipB = document.createElement('div');
-  chipB.className = 'score-chip teamB';
-  chipB.textContent = `${state.teamB}: ${b.correct} / ${b.total}`;
-  scores.appendChild(chipA);
-  scores.appendChild(chipB);
-
-  if (current && !isAnswered(current.q)) {
-    if (current.team === 'A') {
-      turnEl.classList.add('teamA');
-      turnEl.textContent = `▶ Vez de ${state.teamA}`;
-    } else {
-      turnEl.classList.add('teamB');
-      turnEl.textContent = `▶ Vez de ${state.teamB}`;
-    }
-  } else {
-    turnEl.textContent = '✔ Todas respondidas';
-  }
+  const a=scoreTeam('A'), b=scoreTeam('B');
+  const ca=document.createElement('div'); ca.className='score-chip teamA'; ca.textContent=`${state.teamA}: ${a.correct} / ${a.total}`;
+  const cb=document.createElement('div'); cb.className='score-chip teamB'; cb.textContent=`${state.teamB}: ${b.correct} / ${b.total}`;
+  scores.appendChild(ca); scores.appendChild(cb);
+  if(current && !isAnswered(current.q)){
+    if(current.team==='A'){turnEl.classList.add('teamA'); turnEl.textContent=`▶ Vez de ${state.teamA}`;}
+    else{turnEl.classList.add('teamB'); turnEl.textContent=`▶ Vez de ${state.teamB}`;}
+  } else turnEl.textContent='✔ Todas respondidas';
 }
 
-function renderStations() {
-  const wrap = $('#stations');
-  wrap.innerHTML = '';
+function renderStations(){
+  const wrap=$('#stations'); wrap.innerHTML='';
+  state.sequence.forEach((item,pos)=>{
+    const q=state.questions[item.q];
+    const answer=state.answers[item.q];
+    const isCurrent=pos===state.turnPos && !answer;
+    const teamClass=item.team==='A'?'teamA':item.team==='B'?'teamB':'solo';
+    const statusClass=answer?(answer.correct?'success':'failed'):(isCurrent?'current-turn':'locked');
 
-  state.sequence.forEach((item, pos) => {
-    const q = state.questions[item.q];
-    const answer = state.answers[item.q];
-    const isCurrent = pos === state.turnPos && !answer;
-    const teamClass = item.team === 'A' ? 'teamA' : item.team === 'B' ? 'teamB' : 'solo';
-    const statusClass = answer
-      ? (answer.correct ? 'success' : 'failed')
-      : (isCurrent ? 'current-turn' : 'locked');
+    const card=document.createElement('article');
+    card.className=`station ${statusClass} ${isCurrent?teamClass:''}`;
+    card.dataset.q=item.q; card.dataset.pos=pos;
 
-    const card = document.createElement('article');
-    card.className = `station ${statusClass} ${isCurrent ? teamClass : ''}`;
-    card.dataset.q = item.q;
-    card.dataset.pos = pos;
+    const teamLabel=item.team==='A'?state.teamA:item.team==='B'?state.teamB:'Solo';
+    const stateText=answer?(answer.correct?'💥 Detonou!':'💀 Errou'):(isCurrent?'▶ Sua vez':'⏳ Aguardando');
 
-    const teamLabel = item.team === 'A' ? state.teamA
-                    : item.team === 'B' ? state.teamB
-                    : 'Solo';
-
-    const stateText = answer
-      ? (answer.correct ? '💥 Detonou!' : '💀 Errou')
-      : (isCurrent ? '▶ Sua vez' : '⏳ Aguardando');
-
-    card.innerHTML = `
+    card.innerHTML=`
       <span class="team-tag ${teamClass}">${teamLabel}</span>
       <div class="station-head">
-        <strong>Bomba ${pos + 1} · Q${item.q + 1}</strong>
+        <strong>Bomba ${pos+1} · Q${item.q+1}</strong>
         <span class="state-chip">${stateText}</span>
       </div>
       <div class="bomb-rig">
         <div class="lighter"><div class="lighter-top"></div><div class="lighter-wheel"></div><div class="lighter-flame"></div></div>
-        <div class="fuse-track">
-          <div class="fuse-base"></div>
-          <div class="fuse-burn"></div>
-          <div class="spark"></div>
-        </div>
-        <div class="bomb-shell"><span class="bomb-label">Q${item.q + 1}</span></div>
-        <div class="shockwave"></div>
-        <div class="smoke"></div>
-        <div class="confetti">
-          ${'<span></span>'.repeat(10)}
-        </div>
+        <div class="fuse-track"><div class="fuse-base"></div><div class="fuse-burn"></div><div class="spark"></div></div>
+        <div class="bomb-shell"><span class="bomb-label">Q${item.q+1}</span></div>
+        <div class="shockwave"></div><div class="smoke"></div>
+        <div class="confetti">${'<span></span>'.repeat(10)}</div>
         <div class="error-burst"><strong>BOOM ERR!</strong></div>
         <div class="correct-burst"><strong>BOOM!!</strong></div>
       </div>
       <div class="question">${q.q}</div>
       <div class="answer-area"></div>
-      <div class="answer-hint"></div>
-    `;
+      <div class="answer-hint"></div>`;
 
-    const answerArea = card.querySelector('.answer-area');
-    const hint = card.querySelector('.answer-hint');
+    const answerArea=card.querySelector('.answer-area');
+    const hint=card.querySelector('.answer-hint');
 
-    if (answer) {
-      if (q.type === 'open') {
-        const box = document.createElement('input');
-        box.className = 'answer-input';
-        box.value = answer.given || '';
-        box.disabled = true;
+    if(answer){
+      if(q.type==='open'){
+        const box=document.createElement('input');
+        box.className='answer-input'; box.value=answer.given||''; box.disabled=true;
         answerArea.appendChild(box);
-        hint.textContent = answer.correct
-          ? `✔ Resposta correta: ${q.correct}`
-          : `✘ Resposta correta: ${q.correct}`;
+        hint.textContent=answer.correct?`✔ Resposta correta: ${q.correct}`:`✘ Resposta correta: ${q.correct}`;
       } else {
-        const list = document.createElement('div');
-        list.className = 'options-list';
-        q.options.forEach(opt => {
-          const b = document.createElement('button');
-          b.type = 'button';
-          b.className = 'option-btn';
-          b.disabled = true;
-          b.textContent = opt;
-          if (opt === q.correct) b.classList.add('correct-selected');
-          if (opt === answer.given && !answer.correct) b.classList.add('wrong-selected');
+        const list=document.createElement('div'); list.className='options-list';
+        q.options.forEach(opt=>{
+          const b=document.createElement('button'); b.type='button'; b.className='option-btn'; b.disabled=true; b.textContent=opt;
+          if(opt===q.correct) b.classList.add('correct-selected');
+          if(opt===answer.given && !answer.correct) b.classList.add('wrong-selected');
           list.appendChild(b);
         });
         answerArea.appendChild(list);
-        hint.textContent = answer.correct ? '✔ Correto!' : `✘ Resposta correta: ${q.correct}`;
+        hint.textContent=answer.correct?'✔ Correto!':`✘ Resposta correta: ${q.correct}`;
       }
-    } else if (isCurrent) {
-      // Pergunta ativa
-      if (q.type === 'open') {
-        const input = document.createElement('input');
-        input.className = 'answer-input';
-        input.placeholder = 'Digite sua resposta...';
-        input.autocomplete = 'off';
+    } else if(isCurrent){
+      if(q.type==='open'){
+        const input=document.createElement('input');
+        input.className='answer-input'; input.placeholder='Digite sua resposta...'; input.autocomplete='off';
         answerArea.appendChild(input);
-
-        const send = document.createElement('button');
-        send.type = 'button';
-        send.className = 'btn primary';
-        send.style.marginTop = '8px';
-        send.textContent = '🚀 Acender e responder';
+        const send=document.createElement('button'); send.type='button'; send.className='btn primary'; send.style.marginTop='8px'; send.textContent='🚀 Acender e responder';
         answerArea.appendChild(send);
-
-        const submit = () => {
-          const value = input.value.trim();
-          if (!value) { input.focus(); return; }
-          const alternatives = String(q.alternatives || '').split(/\r?\n|,/).map(normalize).filter(Boolean);
-          const accepted = [normalize(q.correct), ...alternatives];
-          const ok = accepted.includes(normalize(value));
-          handleAnswer(item, ok, value);
+        const submit=()=>{
+          const value=input.value.trim(); if(!value){input.focus();return;}
+          const alternatives=String(q.alternatives||'').split(/\r?\n|,/).map(normalize).filter(Boolean);
+          const accepted=[normalize(q.correct),...alternatives];
+          const ok=accepted.includes(normalize(value));
+          handleAnswer(item,ok,value);
         };
-        send.addEventListener('click', submit);
-        input.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
-        setTimeout(() => input.focus(), 100);
+        send.addEventListener('click',submit);
+        input.addEventListener('keydown',e=>{if(e.key==='Enter')submit();});
+        setTimeout(()=>input.focus(),100);
       } else {
-        const list = document.createElement('div');
-        list.className = 'options-list';
-        q.options.forEach(opt => {
-          const b = document.createElement('button');
-          b.type = 'button';
-          b.className = 'option-btn';
-          b.textContent = opt;
-          b.addEventListener('click', () => {
-            if (isAnswered(item.q)) return;
-            const ok = opt === q.correct;
-            handleAnswer(item, ok, opt, b);
-          });
+        const list=document.createElement('div'); list.className='options-list';
+        q.options.forEach(opt=>{
+          const b=document.createElement('button'); b.type='button'; b.className='option-btn'; b.textContent=opt;
+          b.addEventListener('click',()=>{ if(isAnswered(item.q)) return; handleAnswer(item,opt===q.correct,opt,b); });
           list.appendChild(b);
         });
         answerArea.appendChild(list);
       }
     } else {
-      answerArea.innerHTML = '<span class="hint">Aguardando o turno desta equipe…</span>';
+      answerArea.innerHTML='<span class="hint">Aguardando o turno desta equipe…</span>';
     }
-
     wrap.appendChild(card);
   });
 }
 
-function renderCompletion() {
-  const box = $('#completion');
-  if (allAnswered()) {
-    if (state.mode === 'solo') {
-      const s = scoreSolo();
-      box.textContent = `🎉 Fim da dinâmica! Acertos: ${s.correct} de ${s.total}.`;
+function renderCompletion(){
+  const box=$('#completion');
+  if(allAnswered()){
+    if(state.mode==='solo'){
+      const s=scoreSolo();
+      box.textContent=`🎉 Fim da dinâmica! Acertos: ${s.correct} de ${s.total}.`;
     } else {
-      const a = scoreTeam('A'), b = scoreTeam('B');
-      let winner = '';
-      if (a.correct > b.correct) winner = `🏆 ${state.teamA} venceu!`;
-      else if (b.correct > a.correct) winner = `🏆 ${state.teamB} venceu!`;
-      else winner = '🤝 Empate!';
-      box.textContent = `🎉 Fim! ${state.teamA}: ${a.correct}/${a.total} · ${state.teamB}: ${b.correct}/${b.total} — ${winner}`;
+      const a=scoreTeam('A'),b=scoreTeam('B');
+      let w='';
+      if(a.correct>b.correct) w=`🏆 ${state.teamA} venceu!`;
+      else if(b.correct>a.correct) w=`🏆 ${state.teamB} venceu!`;
+      else w='🤝 Empate!';
+      box.textContent=`🎉 Fim! ${state.teamA}: ${a.correct}/${a.total} · ${state.teamB}: ${b.correct}/${b.total} — ${w}`;
     }
     box.classList.add('show');
-  } else {
-    box.classList.remove('show');
-    box.textContent = '';
-  }
+  } else { box.classList.remove('show'); box.textContent=''; }
 }
 
-/* ---------- Resposta ---------- */
-function handleAnswer(item, correct, given, buttonEl) {
-  if (isAnswered(item.q)) return;
+function handleAnswer(item,correct,given,buttonEl){
+  if(isAnswered(item.q)) return;
+  const card=document.querySelector(`.station[data-q="${item.q}"]`);
+  if(card) card.classList.add('activating');
+  card.querySelectorAll('button, input').forEach(el=>el.disabled=true);
+  if(!correct && buttonEl) buttonEl.classList.add('wrong-selected');
+  if(correct && buttonEl) buttonEl.classList.add('correct-selected');
 
-  const card = document.querySelector(`.station[data-q="${item.q}"]`);
-  if (card) card.classList.add('activating');
+  // 🎵 Som: clique do isqueiro + pavio aceso
+  if (window.BoomSound) {
+    window.BoomSound.unlock();
+    window.BoomSound.lighterClick();
+    setTimeout(() => window.BoomSound.startFuse(), 80);
+  }
 
-  // Trava todos os botões visíveis imediatamente
-  card.querySelectorAll('button, input').forEach(el => el.disabled = true);
-
-  if (!correct && buttonEl) buttonEl.classList.add('wrong-selected');
-  if (correct && buttonEl) buttonEl.classList.add('correct-selected');
-
-  setTimeout(() => {
-    state.answers[item.q] = { correct, given, team: item.team };
-    // Avança o turno
-    if (state.turnPos < state.sequence.length - 1) {
+  setTimeout(()=>{
+    state.answers[item.q]={correct,given,team:item.team};
+    if(state.turnPos<state.sequence.length-1){
       state.turnPos++;
-      while (state.turnPos < state.sequence.length - 1 && isAnswered(state.sequence[state.turnPos].q)) {
-        state.turnPos++;
-      }
+      while(state.turnPos<state.sequence.length-1 && isAnswered(state.sequence[state.turnPos].q)) state.turnPos++;
     }
-    render();
-    checkOutcome();
-  }, 1150);
+
+    // 🎵 Som: parar pavio + explosão + acerto/erro
+    if (window.BoomSound) {
+      window.BoomSound.stopFuse();
+      window.BoomSound.explosion();
+      setTimeout(() => {
+        if (correct) window.BoomSound.correct();
+        else window.BoomSound.error();
+      }, 220);
+    }
+
+    render(); checkOutcome();
+  },1150);
 }
 
-function checkOutcome() {
-  if (!allAnswered()) return;
-  if (state.mode === 'solo') {
-    const s = scoreSolo();
-    if (s.correct === s.total) {
-      showOutcome('victory', '🎉', 'Parabéns, você detonou tudo!', `Acertou ${s.correct} de ${s.total} bombas.`);
-    } else {
-      showOutcome('victory', '💥', 'Dinâmica concluída!', `Você acertou ${s.correct} de ${s.total} bombas.`);
-    }
+function checkOutcome(){
+  if(!allAnswered()) return;
+  if(state.mode==='solo'){
+    const s=scoreSolo();
+    if(s.correct===s.total) showOutcome('victory','🎉','Parabéns, você detonou tudo!',`Acertou ${s.correct} de ${s.total} bombas.`);
+    else showOutcome('victory','💥','Dinâmica concluída!',`Você acertou ${s.correct} de ${s.total} bombas.`);
   } else {
-    const a = scoreTeam('A'), b = scoreTeam('B');
-    if (a.correct > b.correct) {
-      showOutcome('victory', '🏆', `${state.teamA} venceu!`, `${a.correct} acertos contra ${b.correct} de ${state.teamB}.`);
-    } else if (b.correct > a.correct) {
-      showOutcome('victory', '🏆', `${state.teamB} venceu!`, `${b.correct} acertos contra ${a.correct} de ${state.teamA}.`);
-    } else {
-      showOutcome('victory', '🤝', 'Empate!', `Ambas as equipes acertaram ${a.correct}.`);
-    }
+    const a=scoreTeam('A'),b=scoreTeam('B');
+    if(a.correct>b.correct) showOutcome('victory','🏆',`${state.teamA} venceu!`,`${a.correct} acertos contra ${b.correct} de ${state.teamB}.`);
+    else if(b.correct>a.correct) showOutcome('victory','🏆',`${state.teamB} venceu!`,`${b.correct} acertos contra ${a.correct} de ${state.teamA}.`);
+    else showOutcome('victory','🤝','Empate!',`Ambas acertaram ${a.correct}.`);
   }
 }
 
-/* ---------- Outcome overlay ---------- */
-function showOutcome(kind, icon, title, message) {
-  const overlay = $('#outcomeOverlay');
-  overlay.classList.remove('victory', 'failure');
-  overlay.classList.add(kind);
-  $('#outcomeIcon').textContent = icon;
-  $('#outcomeTitle').textContent = title;
-  $('#outcomeMessage').textContent = message;
-
-  const conf = $('#outcomeConfetti');
-  conf.innerHTML = '';
-  const colors = kind === 'failure'
-    ? ['#7f1d1d', '#991b1b', '#450a0a']
-    : ['#f7bf25','#79efa4','#4fa8ff','#ff8b3d','#f472b6','#c084fc'];
-  for (let i = 0; i < 40; i++) {
-    const s = document.createElement('span');
-    s.style.left = Math.random() * 100 + '%';
-    s.style.background = colors[i % colors.length];
-    s.style.setProperty('--dur', (2.4 + Math.random() * 2) + 's');
-    s.style.animationDelay = (Math.random() * 0.8) + 's';
+function showOutcome(kind,icon,title,message){
+  const overlay=$('#outcomeOverlay');
+  overlay.classList.remove('victory','failure'); overlay.classList.add(kind);
+  $('#outcomeIcon').textContent=icon; $('#outcomeTitle').textContent=title; $('#outcomeMessage').textContent=message;
+  const conf=$('#outcomeConfetti'); conf.innerHTML='';
+  const colors=kind==='failure'?['#7f1d1d','#991b1b','#450a0a']:['#f7bf25','#79efa4','#4fa8ff','#ff8b3d','#f472b6','#c084fc'];
+  for(let i=0;i<40;i++){
+    const s=document.createElement('span');
+    s.style.left=Math.random()*100+'%';
+    s.style.background=colors[i%colors.length];
+    s.style.setProperty('--dur',(2.4+Math.random()*2)+'s');
+    s.style.animationDelay=(Math.random()*0.8)+'s';
     conf.appendChild(s);
   }
   overlay.classList.add('show');
-}
-function hideOutcome() { $('#outcomeOverlay').classList.remove('show'); }
 
-/* ---------- Restart ---------- */
-function restartGame(keepConfig = true) {
+  // 🎵 Som: vitória / derrota
+  if (window.BoomSound) {
+    window.BoomSound.unlock();
+    setTimeout(() => {
+      if (kind === 'victory') window.BoomSound.victory();
+      else window.BoomSound.defeat();
+    }, 300);
+  }
+}
+function hideOutcome(){ $('#outcomeOverlay').classList.remove('show'); }
+
+function restartGame(){
   stopTimer();
-  state.answers = {};
-  state.turnPos = 0;
-  state.sequence = buildSequence();
-  resetTimer();
-  hideOutcome();
-  render();
+  state.answers={}; state.turnPos=0; state.sequence=buildSequence();
+  resetTimer(); hideOutcome(); render();
 }
 
 /* ---------- Settings editor ---------- */
-function renderEditors() {
-  const wrap = $('#questionEditors');
-  wrap.innerHTML = '';
-  state.questions.forEach((q, idx) => {
-    const card = document.createElement('div');
-    card.className = 'editor-card';
-    const isChoice = q.type === 'choice';
-    card.innerHTML = `
+function renderEditors(){
+  const wrap=$('#questionEditors'); wrap.innerHTML='';
+  state.questions.forEach((q,idx)=>{
+    const card=document.createElement('div'); card.className='editor-card';
+    const isChoice=q.type==='choice';
+    card.innerHTML=`
       <div class="editor-card-head">
-        <strong>Pergunta ${idx + 1}</strong>
+        <strong>Pergunta ${idx+1}</strong>
         <div class="editor-actions">
-          <span class="type-badge">${isChoice ? 'Múltipla escolha' : 'Resposta digitada'}</span>
+          <span class="type-badge">${isChoice?'Múltipla escolha':'Resposta digitada'}</span>
           <button class="mini-btn danger" data-remove="${idx}" type="button">Remover</button>
         </div>
       </div>
-      <div class="field">
-        <label>Formato</label>
+      <div class="field"><label>Formato</label>
         <select class="select-input" data-type="${idx}">
-          <option value="choice" ${isChoice ? 'selected' : ''}>Múltipla escolha</option>
-          <option value="open" ${!isChoice ? 'selected' : ''}>Resposta digitada</option>
+          <option value="choice" ${isChoice?'selected':''}>Múltipla escolha</option>
+          <option value="open" ${!isChoice?'selected':''}>Resposta digitada</option>
         </select>
       </div>
-      <div class="field" style="margin-top:8px;">
-        <label>Pergunta</label>
-        <textarea class="text-area" data-q="${idx}">${q.q || ''}</textarea>
+      <div class="field" style="margin-top:8px;"><label>Pergunta</label>
+        <textarea class="text-area" data-q="${idx}">${q.q||''}</textarea>
       </div>
-      ${isChoice ? `
-        <div class="field" style="margin-top:8px;">
-          <label>Alternativas (uma por linha)</label>
-          <textarea class="text-area" data-options="${idx}">${(q.options || []).join('\n')}</textarea>
+      ${isChoice?`
+        <div class="field" style="margin-top:8px;"><label>Alternativas (uma por linha)</label>
+          <textarea class="text-area" data-options="${idx}">${(q.options||[]).join('\n')}</textarea>
         </div>
-        <div class="field" style="margin-top:8px;">
-          <label>Alternativa correta</label>
-          <input class="text-input" data-correct="${idx}" value="${q.correct || ''}">
+        <div class="field" style="margin-top:8px;"><label>Alternativa correta</label>
+          <input class="text-input" data-correct="${idx}" value="${q.correct||''}">
+        </div>`:`
+        <div class="field" style="margin-top:8px;"><label>Resposta correta</label>
+          <input class="text-input" data-correct="${idx}" value="${q.correct||''}">
         </div>
-      ` : `
-        <div class="field" style="margin-top:8px;">
-          <label>Resposta correta</label>
-          <input class="text-input" data-correct="${idx}" value="${q.correct || ''}">
-        </div>
-        <div class="field" style="margin-top:8px;">
-          <label>Outras respostas aceitas (uma por linha)</label>
-          <textarea class="text-area" data-alt="${idx}">${q.alternatives || ''}</textarea>
-        </div>
-      `}
+        <div class="field" style="margin-top:8px;"><label>Outras respostas aceitas (uma por linha)</label>
+          <textarea class="text-area" data-alt="${idx}">${q.alternatives||''}</textarea>
+        </div>`}
     `;
     wrap.appendChild(card);
   });
-
-  // Bind edits
-  wrap.querySelectorAll('[data-q]').forEach(el => el.addEventListener('input', e => {
-    state.questions[+e.target.dataset.q].q = e.target.value; saveState();
-  }));
-  wrap.querySelectorAll('[data-correct]').forEach(el => el.addEventListener('input', e => {
-    state.questions[+e.target.dataset.correct].correct = e.target.value; saveState();
-  }));
-  wrap.querySelectorAll('[data-options]').forEach(el => el.addEventListener('input', e => {
-    state.questions[+e.target.dataset.options].options = e.target.value.split(/\r?\n/);
-    saveState();
-  }));
-  wrap.querySelectorAll('[data-alt]').forEach(el => el.addEventListener('input', e => {
-    state.questions[+e.target.dataset.alt].alternatives = e.target.value; saveState();
-  }));
-  wrap.querySelectorAll('[data-type]').forEach(el => el.addEventListener('change', e => {
-    const idx = +e.target.dataset.type;
-    const q = state.questions[idx];
-    q.type = e.target.value;
-    if (q.type === 'choice' && !q.options) { q.options = ['','','','']; q.correct = q.correct || ''; }
+  wrap.querySelectorAll('[data-q]').forEach(el=>el.addEventListener('input',e=>{state.questions[+e.target.dataset.q].q=e.target.value;saveState();}));
+  wrap.querySelectorAll('[data-correct]').forEach(el=>el.addEventListener('input',e=>{state.questions[+e.target.dataset.correct].correct=e.target.value;saveState();}));
+  wrap.querySelectorAll('[data-options]').forEach(el=>el.addEventListener('input',e=>{state.questions[+e.target.dataset.options].options=e.target.value.split(/\r?\n/);saveState();}));
+  wrap.querySelectorAll('[data-alt]').forEach(el=>el.addEventListener('input',e=>{state.questions[+e.target.dataset.alt].alternatives=e.target.value;saveState();}));
+  wrap.querySelectorAll('[data-type]').forEach(el=>el.addEventListener('change',e=>{
+    const idx=+e.target.dataset.type; const q=state.questions[idx]; q.type=e.target.value;
+    if(q.type==='choice' && !q.options){q.options=['','','','']; q.correct=q.correct||'';}
     saveState(); renderEditors();
   }));
-  wrap.querySelectorAll('[data-remove]').forEach(el => el.addEventListener('click', e => {
-    const idx = +e.target.dataset.remove;
-    if (state.questions.length <= 1) { alert('É preciso ao menos 1 pergunta.'); return; }
-    state.questions.splice(idx, 1);
-    restartGame(); renderEditors(); saveState();
+  wrap.querySelectorAll('[data-remove]').forEach(el=>el.addEventListener('click',e=>{
+    const idx=+e.target.dataset.remove;
+    if(state.questions.length<=1){alert('É preciso ao menos 1 pergunta.'); return;}
+    state.questions.splice(idx,1); restartGame(); renderEditors(); saveState();
   }));
 }
 
-/* ---------- Setup modal binding ---------- */
-function openSetup() { $('#setupOverlay').classList.add('show'); }
-function closeSetup() { $('#setupOverlay').classList.remove('show'); }
-function openSettings() {
-  $('#cfgTitle').value = state.title;
-  $('#cfgSubtitle').value = state.subtitle;
-  $('#cfgTimerMin').value = state.timerMinutes;
-  $('#cfgTimerSec').value = state.timerSeconds;
+/* ============================================================
+   IMPORT / EXPORT JSON
+   ============================================================ */
+const JsonIO = {
+  setStatus(msg, kind='') {
+    const el = $('#jsonStatus');
+    el.className = 'json-status ' + kind;
+    el.textContent = msg;
+  },
+  validateQuestion(q, index) {
+    if (!q || typeof q !== 'object') return `Item ${index+1}: não é um objeto.`;
+    const type = q.type === 'open' ? 'open' : 'choice';
+    if (!q.q || typeof q.q !== 'string' || !q.q.trim()) return `Item ${index+1}: falta o campo "q" (texto da pergunta).`;
+    if (!q.correct || String(q.correct).trim() === '') return `Item ${index+1}: falta o campo "correct".`;
+    if (type === 'choice') {
+      if (!Array.isArray(q.options) || q.options.length < 2) return `Item ${index+1}: precisa ter ao menos 2 "options".`;
+      if (!q.options.includes(q.correct)) return `Item ${index+1}: "correct" ("${q.correct}") não está entre as "options".`;
+    }
+    return null;
+  },
+  normalizeQuestion(q) {
+    const type = q.type === 'open' ? 'open' : 'choice';
+    if (type === 'choice') {
+      return {
+        type: 'choice',
+        q: String(q.q).trim(),
+        options: q.options.map(o => String(o)),
+        correct: String(q.correct)
+      };
+    }
+    return {
+      type: 'open',
+      q: String(q.q).trim(),
+      correct: String(q.correct).trim(),
+      alternatives: q.alternatives ? String(q.alternatives) : ''
+    };
+  },
+  parse(rawText) {
+    let data;
+    try { data = JSON.parse(rawText); }
+    catch (e) { return { error: 'JSON inválido: ' + e.message }; }
+    let list;
+    if (Array.isArray(data)) list = data;
+    else if (data && Array.isArray(data.questions)) list = data.questions;
+    else if (data && Array.isArray(data.perguntas)) list = data.perguntas;
+    else return { error: 'O JSON precisa ser um array de perguntas ou um objeto com a chave "questions".' };
+
+    if (list.length === 0) return { error: 'O JSON não contém nenhuma pergunta.' };
+
+    const valid = [];
+    for (let i = 0; i < list.length; i++) {
+      const err = this.validateQuestion(list[i], i);
+      if (err) return { error: err };
+      valid.push(this.normalizeQuestion(list[i]));
+    }
+    return { questions: valid };
+  },
+  apply(questions) {
+    state.questions = questions;
+    if (state.mode === 'team' && state.distribution === 'block') {
+      const maxSplit = Math.max(1, questions.length - 1);
+      state.blockSplit = Math.min(Math.max(1, state.blockSplit || 7), maxSplit);
+    }
+    restartGame();
+    renderEditors();
+    saveState();
+  },
+  export() {
+    const payload = {
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      questions: state.questions
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const stamp = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `boom-perguntas-${stamp}.json`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 500);
+    this.setStatus(`✅ ${state.questions.length} pergunta(s) exportada(s).`, 'ok');
+  },
+  template() {
+    return JSON.stringify([
+      { type: 'choice', q: 'Quanto é 7 × 8?', options: ['48', '54', '56', '64'], correct: '56' },
+      { type: 'open', q: 'Qual é a capital do Brasil?', correct: 'Brasília', alternatives: 'brasilia' }
+    ], null, 2);
+  }
+};
+
+$('#exportJsonBtn').addEventListener('click', () => JsonIO.export());
+
+$('#copyTemplateBtn').addEventListener('click', async () => {
+  const tpl = JsonIO.template();
+  $('#pasteJsonArea').value = tpl;
+  try {
+    await navigator.clipboard.writeText(tpl);
+    JsonIO.setStatus('📋 Modelo copiado para a área de transferência!', 'ok');
+  } catch (e) {
+    JsonIO.setStatus('📋 Modelo carregado na caixa abaixo (copie manualmente).', 'ok');
+  }
+});
+
+$('#applyPasteBtn').addEventListener('click', () => {
+  const raw = $('#pasteJsonArea').value.trim();
+  if (!raw) { JsonIO.setStatus('⚠️ Cole um JSON antes de aplicar.', 'err'); return; }
+  const result = JsonIO.parse(raw);
+  if (result.error) { JsonIO.setStatus('❌ ' + result.error, 'err'); return; }
+  JsonIO.apply(result.questions);
+  JsonIO.setStatus(`✅ ${result.questions.length} pergunta(s) importada(s) com sucesso!`, 'ok');
+  $('#pasteJsonArea').value = '';
+});
+
+$('#importFileBtn').addEventListener('click', () => $('#importFileInput').click());
+$('#importFileInput').addEventListener('change', (e) => {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    const result = JsonIO.parse(String(reader.result));
+    if (result.error) { JsonIO.setStatus('❌ ' + result.error, 'err'); }
+    else {
+      JsonIO.apply(result.questions);
+      JsonIO.setStatus(`✅ ${result.questions.length} pergunta(s) importada(s) de "${file.name}".`, 'ok');
+    }
+    e.target.value = '';
+  };
+  reader.onerror = () => { JsonIO.setStatus('❌ Erro ao ler o arquivo.', 'err'); e.target.value = ''; };
+  reader.readAsText(file);
+});
+
+/* ---------- Setup modal ---------- */
+function openSetup(){ $('#setupOverlay').classList.add('show'); }
+function closeSetup(){ $('#setupOverlay').classList.remove('show'); }
+function openSettings(){
+  $('#cfgTitle').value=state.title;
+  $('#cfgSubtitle').value=state.subtitle;
+  $('#cfgTimerMin').value=state.timerMinutes;
+  $('#cfgTimerSec').value=state.timerSeconds;
   renderEditors();
+  JsonIO.setStatus('');
   $('#settingsOverlay').classList.add('show');
 }
-function closeSettings() { $('#settingsOverlay').classList.remove('show'); }
+function closeSettings(){ $('#settingsOverlay').classList.remove('show'); }
 
 /* ---------- Eventos ---------- */
 document.addEventListener('click', e => {
-  const closeId = e.target.dataset && e.target.dataset.close;
-  if (closeId) { document.getElementById(closeId).classList.remove('show'); }
+  const id = e.target.dataset && e.target.dataset.close;
+  if (id) document.getElementById(id).classList.remove('show');
 });
 
 $('#restartBtn').addEventListener('click', () => restartGame());
@@ -1025,77 +1029,113 @@ $('#outcomeRestartBtn').addEventListener('click', () => restartGame());
 $('#outcomeSetupBtn').addEventListener('click', () => { hideOutcome(); openSetup(); });
 $('#outcomeCloseBtn').addEventListener('click', () => hideOutcome());
 
-// Modo
 $('#modePicker').addEventListener('click', e => {
-  const card = e.target.closest('.mode-card');
-  if (!card) return;
+  const card = e.target.closest('.mode-card'); if (!card) return;
   $$('.mode-card').forEach(c => c.classList.remove('selected'));
   card.classList.add('selected');
   const mode = card.dataset.mode;
   $('#teamFields').style.display = mode === 'team' ? 'block' : 'none';
 });
 
-// Distribuição
 $('#distPicker').addEventListener('click', e => {
-  const card = e.target.closest('.dist-card');
-  if (!card) return;
+  const card = e.target.closest('.dist-card'); if (!card) return;
   $$('.dist-card').forEach(c => c.classList.remove('selected'));
   card.classList.add('selected');
   $('#blockSplitField').style.display = card.dataset.dist === 'block' ? 'flex' : 'none';
 });
 
-// Iniciar jogo
 $('#startGameBtn').addEventListener('click', () => {
-  const mode = document.querySelector('.mode-card.selected').dataset.mode;
-  const dist = document.querySelector('.dist-card.selected').dataset.dist;
-  state.mode = mode;
-  state.distribution = dist;
+  state.mode = document.querySelector('.mode-card.selected').dataset.mode;
+  state.distribution = document.querySelector('.dist-card.selected').dataset.dist;
   state.teamA = $('#cfgTeamA').value.trim() || 'Equipe A';
   state.teamB = $('#cfgTeamB').value.trim() || 'Equipe B';
   state.blockSplit = Math.max(1, parseInt($('#cfgBlockSplit').value) || 7);
-  state.answers = {};
-  state.turnPos = 0;
+  state.answers = {}; state.turnPos = 0;
   state.sequence = buildSequence();
-  resetTimer();
-  closeSetup();
-  render();
+  resetTimer(); closeSetup(); render();
+  if (window.BoomSound) window.BoomSound.unlock();
 });
 
-// Salvar gerais
 $('#saveGeneralBtn').addEventListener('click', () => {
   state.title = $('#cfgTitle').value;
   state.subtitle = $('#cfgSubtitle').value;
   state.timerMinutes = Math.max(0, parseInt($('#cfgTimerMin').value) || 0);
   state.timerSeconds = Math.max(0, Math.min(59, parseInt($('#cfgTimerSec').value) || 0));
-  resetTimer();
-  saveState();
-  closeSettings();
-  render();
+  resetTimer(); saveState(); closeSettings(); render();
 });
 
-// Adicionar pergunta
 $('#addQuestionBtn').addEventListener('click', () => {
-  state.questions.push({
-    type: 'choice',
-    q: 'Nova pergunta?',
-    options: ['Alternativa 1', 'Alternativa 2', 'Alternativa 3', 'Alternativa 4'],
-    correct: 'Alternativa 1'
-  });
-  saveState();
-  renderEditors();
+  state.questions.push({ type:'choice', q:'Nova pergunta?', options:['Alternativa 1','Alternativa 2','Alternativa 3','Alternativa 4'], correct:'Alternativa 1' });
+  saveState(); renderEditors();
 });
+
+/* ============================================================
+   SONS + PWA
+   ============================================================ */
+(function () {
+  const S = window.BoomSound;
+  if (!S) { console.warn('sounds.js não carregado — sem áudio.'); return; }
+
+  const soundBtn = document.getElementById('soundBtn');
+  const volumeSlider = document.getElementById('volumeSlider');
+  let soundOn = localStorage.getItem('boom_sound_on') !== 'false';
+  let volume = parseFloat(localStorage.getItem('boom_sound_vol') || '0.7');
+
+  volumeSlider.value = Math.round(volume * 100);
+  S.setEnabled(soundOn);
+  S.setVolume(volume);
+  soundBtn.textContent = soundOn ? '🔊 Som' : '🔇 Mutado';
+
+  soundBtn.addEventListener('click', () => {
+    soundOn = !soundOn;
+    S.unlock();
+    S.setEnabled(soundOn);
+    soundBtn.textContent = soundOn ? '🔊 Som' : '🔇 Mutado';
+    localStorage.setItem('boom_sound_on', soundOn);
+    if (soundOn) S.lighterClick();
+  });
+
+  volumeSlider.addEventListener('input', (e) => {
+    volume = parseInt(e.target.value) / 100;
+    S.setVolume(volume);
+    localStorage.setItem('boom_sound_vol', volume);
+  });
+
+  // Desbloqueia áudio na primeira interação (iOS/Safari)
+  const unlockOnce = () => { S.unlock(); document.removeEventListener('pointerdown', unlockOnce); };
+  document.addEventListener('pointerdown', unlockOnce);
+
+  // Tique do cronômetro nos últimos 10s
+  let lastTickSec = -1;
+  setInterval(() => {
+    const rem = document.getElementById('chronoRemaining').textContent;
+    const m = rem.match(/^(\d{2}):(\d{2})$/);
+    if (!m) return;
+    const total = parseInt(m[1]) * 60 + parseInt(m[2]);
+    if (total <= 10 && total > 0 && total !== lastTickSec) {
+      lastTickSec = total;
+      S.tick(total <= 5);
+    }
+    if (total > 10) lastTickSec = -1;
+  }, 250);
+
+  // Registra Service Worker (PWA)
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./service-worker.js')
+        .then(() => console.log('✅ Service Worker registrado'))
+        .catch((e) => console.warn('SW falhou:', e));
+    });
+  }
+})();
 
 /* ---------- Boot ---------- */
-(function init() {
-  if (!state.sequence || state.sequence.length !== state.questions.length) {
+(function init(){
+  if(!state.sequence || state.sequence.length !== state.questions.length){
     state.sequence = buildSequence();
   }
-  resetTimer();
-  render();
-  // Se ainda não configurou o modo, abre o setup na primeira visita
-  if (!localStorage.getItem(STORAGE_KEY)) {
-    openSetup();
-  }
+  resetTimer(); render();
+  if(!localStorage.getItem(STORAGE_KEY)) openSetup();
 })();
 </script>
 </body>
